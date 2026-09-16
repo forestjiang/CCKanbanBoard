@@ -755,6 +755,68 @@
     font-weight: 600;
     color: #0b7a6b;
   }
+
+  /* ============================================================
+     WELCOME BUBBLE — points visitors at the WhatsApp widget
+     ============================================================ */
+  .welcome-bubble {
+    position: fixed;
+    bottom: calc(var(--space-5) + 68px);
+    right: var(--space-5);
+    width: 270px;
+    max-width: calc(100vw - 2 * var(--space-5));
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.22);
+    padding: var(--space-4);
+    z-index: 199;
+    animation: welcome-in 0.25s ease;
+  }
+
+  .welcome-bubble.hidden { display: none; }
+
+  .welcome-bubble-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--text-muted);
+    padding: 4px 7px;
+    border-radius: var(--radius-sm);
+  }
+  .welcome-bubble-close:hover { background: var(--uob-blue-50); }
+
+  .welcome-bubble-text {
+    margin: 0 0 var(--space-3);
+    padding-right: var(--space-4);
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .welcome-bubble-cta {
+    width: 100%;
+    background: #0b7a6b;
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 8px var(--space-3);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .welcome-bubble-cta:hover { background: #095f53; }
+
+  @keyframes welcome-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .welcome-bubble { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -963,6 +1025,15 @@
         <path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1a6.6 6.6 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-1 2.2c0 1.3.9 2.6 1.1 2.8.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/>
       </svg>
     </button>
+  </div>
+
+  <!-- ============================================================
+       WELCOME BUBBLE — appears 5s after load, points to WhatsApp
+       ============================================================ -->
+  <div class="welcome-bubble hidden" id="welcomeBubble" role="status" aria-live="polite">
+    <button type="button" class="welcome-bubble-close" id="welcomeBubbleClose" aria-label="Dismiss welcome message">×</button>
+    <p class="welcome-bubble-text">👋 Welcome to IT Support! Got a question? Ask our WhatsApp chatbot and we'll get back to you.</p>
+    <button type="button" class="welcome-bubble-cta" id="welcomeBubbleCta">Open WhatsApp chat</button>
   </div>
 
 <script>
@@ -1560,10 +1631,38 @@
     });
   }
 
+  function initWelcomeBubble() {
+    const bubble = document.getElementById("welcomeBubble");
+    const closeBtn = document.getElementById("welcomeBubbleClose");
+    const ctaBtn = document.getElementById("welcomeBubbleCta");
+    const whatsappToggle = document.getElementById("whatsappToggle");
+    if (!bubble || !closeBtn || !ctaBtn || !whatsappToggle) return;
+
+    let dismissed = false;
+
+    function hideBubble() {
+      dismissed = true;
+      bubble.classList.add("hidden");
+    }
+
+    setTimeout(() => {
+      if (!dismissed) bubble.classList.remove("hidden");
+    }, 5000);
+
+    closeBtn.addEventListener("click", hideBubble);
+    ctaBtn.addEventListener("click", e => {
+      e.stopPropagation();
+      hideBubble();
+      whatsappToggle.click();
+      whatsappToggle.focus();
+    });
+  }
+
   function init() {
     seedTasks();
     initEvents();
     initWhatsAppWidget();
+    initWelcomeBubble();
     renderBoard();
   }
 
