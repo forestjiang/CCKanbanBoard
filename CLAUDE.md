@@ -16,7 +16,7 @@ Open `index.html` directly in a browser (double-click, or `file://` path). No in
 - **No persistence of any kind** — no `localStorage`, `sessionStorage`, `IndexedDB`, cookies, or backend database. Board state is an in-memory JS object only and intentionally resets on page refresh (there's a visible note in the header saying so — keep it if state ever becomes non-trivial to lose).
 - **FormSubmit is the only network call** — the app posts to a FormSubmit AJAX endpoint (`formsubmit.co`) purely to email-notify on new task creation. It must never block or break the board UI on failure (wrapped in try/catch, shown as a non-blocking toast).
 - Never hardcode a real personal/user email into `FORMSUBMIT_ENDPOINT` — keep it a placeholder (`YOUR_EMAIL@example.com`) since this file may be shared or committed.
-- Do not use UOB's real logo/trademarks — the header uses a neutral text wordmark and a corporate-blue palette only.
+- The header palette is inspired by UOB's real brand colors (red `#E4002B` primary, "Endeavour" blue `#0060AE` accent) — this was an explicit, informed decision to move off the earlier neutral-blue-only palette. Still do not reproduce UOB's actual logo artwork/wordmark graphic; the "U" mark in the header is an original monogram badge, not a copy of their real logo file.
 - All seed data (task titles, CVE numbers, assignee names, etc.) is fabricated placeholder content for demo purposes, not real records — keep new seed data equally fictional and clearly non-attributable to real people/systems.
 
 ## Architecture (single file: `index.html`)

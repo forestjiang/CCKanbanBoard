@@ -1,1 +1,6 @@
 .claude/settings.local.json
+
+# Locally installed Claude Code skills (third-party tooling, not part of the app)
+.agents/
+.claude/skills/
+skills-lock.json

@@ -6,34 +6,42 @@
 <title>UOB IT PMO — Kanban Board</title>
 <style>
   /* ============================================================
-     DESIGN TOKENS — corporate blue palette + spacing scale
+     DESIGN TOKENS — UOB red + Endeavour blue + spacing scale
+     Red = brand/authority (header, primary actions, logo, blocked/alert)
+     Blue = workflow/motion (columns, links, focus, in-progress)
      ============================================================ */
   :root {
-    --uob-navy: #002b5c;
-    --uob-blue-700: #00448c;
-    --uob-blue-600: #0058b0;
-    --uob-blue-500: #0066cc;
-    --uob-blue-100: #e6f0fa;
-    --uob-blue-50: #f3f8fd;
-    --bg: #f2f5f9;
+    --uob-red: #e4002b;
+    --uob-red-700: #a80021;
+    --uob-red-50: #fbeaed;
+    --uob-blue: #0060ae;
+    --uob-blue-700: #004a87;
+    --uob-blue-100: #e5eff7;
+    --uob-blue-50: #f2f7fb;
+    --bg: #f5f3f1;
     --surface: #ffffff;
-    --border: #d7e0ea;
-    --text: #16232f;
-    --text-muted: #5a6b7b;
-    --focus-ring: #0066cc;
+    --border: #e1ddd8;
+    --text: #1a1a1a;
+    --text-muted: #6b6560;
+    --focus-ring: #0060ae;
 
-    --priority-critical: #c0392b;
-    --priority-critical-bg: #fdecea;
-    --priority-high: #b8720c;
-    --priority-high-bg: #fdf1e0;
-    --priority-medium: #1d5fae;
-    --priority-medium-bg: #e6f0fa;
-    --priority-low: #5a6b7b;
-    --priority-low-bg: #eef1f4;
+    --priority-critical: #b3261e;
+    --priority-critical-bg: #fbeae9;
+    --priority-high: #a15c00;
+    --priority-high-bg: #fbf1e1;
+    --priority-medium: #0060ae;
+    --priority-medium-bg: #e5eff7;
+    --priority-low: #6b6560;
+    --priority-low-bg: #efece8;
 
-    --danger: #c0392b;
+    --danger: #b3261e;
     --success: #1c7c3c;
-    --warning: #b8720c;
+    --warning: #a15c00;
+
+    --chart-backlog: #9c948c;
+    --chart-progress: #0060ae;
+    --chart-blocked: #e4002b;
+    --chart-done: #1c7c3c;
 
     --space-1: 4px;
     --space-2: 8px;
@@ -61,7 +69,7 @@
     line-height: 1.4;
   }
 
-  a { color: var(--uob-blue-600); }
+  a { color: var(--uob-blue); }
 
   /* Visible focus rings everywhere — accessibility requirement */
   a:focus-visible,
@@ -83,7 +91,7 @@
      HEADER
      ============================================================ */
   header.app-header {
-    background: var(--uob-navy);
+    background: var(--uob-red);
     color: #fff;
     padding: var(--space-4) var(--space-5);
     display: flex;
@@ -95,58 +103,114 @@
 
   .brand {
     display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .logo-mark {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    color: var(--uob-red);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .brand-text {
+    display: flex;
     flex-direction: column;
     gap: 2px;
   }
 
   .brand .wordmark {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
     color: #fff;
   }
 
-  .brand .wordmark span {
-    color: var(--uob-blue-500);
-    background: #fff;
-    border-radius: 4px;
-    padding: 0 6px;
-    margin-right: 6px;
+  .brand .wordmark .unit {
+    font-weight: 400;
+    color: #fff6f6;
   }
 
   .brand .tagline {
     font-size: 0.8rem;
-    color: #cfe0f5;
+    color: #fff6f6;
   }
 
   .demo-note {
     font-size: 0.75rem;
-    color: #cfe0f5;
+    color: #fff6f6;
     max-width: 320px;
   }
 
   .btn-primary {
-    background: var(--uob-blue-500);
+    background: var(--uob-blue);
     color: #fff;
-    border: 1px solid var(--uob-blue-500);
+    border: 1px solid var(--uob-blue);
     border-radius: var(--radius-md);
     padding: var(--space-2) var(--space-4);
     font-size: 0.9rem;
     font-weight: 600;
   }
-  .btn-primary:hover { background: var(--uob-blue-600); }
+  .btn-primary:hover { background: var(--uob-blue-700); }
   .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
   /* ============================================================
-     SUMMARY STRIP
+     SUMMARY STRIP — status bar chart + total/overdue stat chips
      ============================================================ */
   .summary-strip {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-5);
+    gap: var(--space-6);
+    align-items: center;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .status-chart {
+    flex: 0 1 420px;
+    min-width: 260px;
+    max-width: 420px;
+  }
+
+  .status-chart svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .status-chart text {
+    font-family: var(--font);
+  }
+
+  .chart-track {
+    fill: var(--uob-blue-50);
+  }
+
+  .chart-bar-label {
+    font-size: 0.72rem;
+    fill: var(--text-muted);
+  }
+
+  .chart-bar-count {
+    font-size: 0.78rem;
+    font-weight: 700;
+    fill: var(--text);
+  }
+
+  .summary-stats {
+    display: flex;
+    gap: var(--space-6);
+    flex: 0 0 auto;
   }
 
   .stat {
@@ -157,19 +221,17 @@
   }
 
   .stat-value {
-    font-size: 1.3rem;
+    font-size: 1.7rem;
     font-weight: 700;
-    color: var(--uob-navy);
+    color: var(--text);
   }
 
   .stat-label {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
   }
 
-  .stat-overdue .stat-value { color: var(--danger); }
+  .stat-overdue .stat-value { color: var(--uob-red); }
 
   /* ============================================================
      FILTER BAR
@@ -258,11 +320,11 @@
   .column-header h2 {
     font-size: 0.95rem;
     margin: 0;
-    color: var(--uob-navy);
+    color: var(--text);
   }
 
   .column-badge {
-    background: var(--uob-blue-500);
+    background: var(--uob-blue);
     color: #fff;
     font-size: 0.75rem;
     font-weight: 700;
@@ -288,7 +350,7 @@
 
   .column-body.drag-over {
     background-color: var(--uob-blue-100);
-    outline: 2px dashed var(--uob-blue-500);
+    outline: 2px dashed var(--uob-blue);
     outline-offset: -4px;
   }
 
@@ -355,7 +417,7 @@
 
   .card-project {
     font-size: 0.78rem;
-    color: var(--uob-blue-600);
+    color: var(--uob-blue);
     margin: 0 0 var(--space-2);
     font-weight: 600;
   }
@@ -489,7 +551,7 @@
   .modal-header h2 {
     margin: 0;
     font-size: 1.1rem;
-    color: var(--uob-navy);
+    color: var(--uob-red);
   }
 
   .btn-close-modal {
@@ -604,8 +666,11 @@
        ============================================================ -->
   <header class="app-header">
     <div class="brand">
-      <div class="wordmark"><span>UOB</span>IT PMO</div>
-      <div class="tagline">Internal IT Project Management — Demo / Training Build</div>
+      <span class="logo-mark" aria-hidden="true">U</span>
+      <div class="brand-text">
+        <div class="wordmark">UOB <span class="unit">IT PMO</span></div>
+        <div class="tagline">Internal IT Project Management — Demo / Training Build</div>
+      </div>
     </div>
     <p class="demo-note">Demo mode: board data lives only in this browser tab. Refreshing the page resets it to the seeded example data — nothing is saved.</p>
     <button type="button" class="btn-primary" id="openAddTaskBtn">+ Add Task</button>
@@ -1004,6 +1069,41 @@
     renderSummary();
   }
 
+  const CHART_COLORS = {
+    "Backlog": "var(--chart-backlog)",
+    "In Progress": "var(--chart-progress)",
+    "Blocked": "var(--chart-blocked)",
+    "Done": "var(--chart-done)"
+  };
+
+  function renderStatusChart(counts) {
+    const rowH = 30;
+    const trackX = 100;
+    const trackW = 250;
+    const chartH = STATUSES.length * rowH + 6;
+    const maxCount = Math.max(1, ...STATUSES.map(s => counts[s]));
+
+    const rows = STATUSES.map((s, i) => {
+      const y = i * rowH + 6;
+      const barW = counts[s] === 0 ? 0 : Math.max(6, (counts[s] / maxCount) * trackW);
+      const color = CHART_COLORS[s] || "var(--uob-blue)";
+      return `
+        <text x="0" y="${y + 12}" class="chart-bar-label">${escapeHtml(s)}</text>
+        <rect x="${trackX}" y="${y}" width="${trackW}" height="14" rx="7" class="chart-track"></rect>
+        <rect x="${trackX}" y="${y}" width="${barW}" height="14" rx="7" style="fill:${color}"></rect>
+        <text x="${trackX + trackW + 10}" y="${y + 12}" class="chart-bar-count">${counts[s]}</text>
+      `;
+    }).join("");
+
+    const summaryText = STATUSES.map(s => `${s} ${counts[s]}`).join(", ");
+
+    return `
+      <svg viewBox="0 0 400 ${chartH}" role="img" aria-label="Tasks by status: ${escapeHtml(summaryText)}">
+        ${rows}
+      </svg>
+    `;
+  }
+
   function renderSummary() {
     const total = state.tasks.length;
     const counts = {};
@@ -1012,9 +1112,11 @@
 
     const summary = document.getElementById("summaryStrip");
     summary.innerHTML = `
-      <div class="stat"><span class="stat-value">${total}</span><span class="stat-label">Total Tasks</span></div>
-      ${STATUSES.map(s => `<div class="stat"><span class="stat-value">${counts[s]}</span><span class="stat-label">${escapeHtml(s)}</span></div>`).join("")}
-      <div class="stat stat-overdue"><span class="stat-value">${overdue}</span><span class="stat-label">Overdue</span></div>
+      <div class="status-chart">${renderStatusChart(counts)}</div>
+      <div class="summary-stats">
+        <div class="stat"><span class="stat-value">${total}</span><span class="stat-label">Total tasks</span></div>
+        <div class="stat stat-overdue"><span class="stat-value">${overdue}</span><span class="stat-label">Overdue</span></div>
+      </div>
     `;
   }
 
