@@ -663,6 +663,42 @@
   .toast-success { background: var(--success); }
   .toast-warning { background: var(--warning); }
   .toast-error { background: var(--danger); }
+
+  /* ============================================================
+     WHATSAPP IT SUPPORT — floating click-to-chat link
+     ============================================================ */
+  .whatsapp-fab {
+    position: fixed;
+    bottom: var(--space-5);
+    left: var(--space-5);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: #0b7a6b;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px var(--space-4);
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 200;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .whatsapp-fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  }
+
+  .whatsapp-fab svg {
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 560px) {
+    .whatsapp-fab-label { display: none; }
+    .whatsapp-fab { padding: 12px; }
+  }
 </style>
 </head>
 <body>
@@ -855,6 +891,16 @@
        ============================================================ -->
   <div class="toast-region" id="toastRegion" role="status" aria-live="polite"></div>
 
+  <!-- ============================================================
+       WHATSAPP IT SUPPORT — floating click-to-chat link
+       ============================================================ -->
+  <a class="whatsapp-fab" id="whatsappFab" href="#" target="_blank" rel="noopener" aria-label="Chat with IT Support on WhatsApp">
+    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1a6.6 6.6 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-1 2.2c0 1.3.9 2.6 1.1 2.8.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/>
+    </svg>
+    <span class="whatsapp-fab-label">IT Support</span>
+  </a>
+
 <script>
 (function () {
   "use strict";
@@ -871,6 +917,14 @@
      future submissions deliver normally.
      ============================================================ */
   const FORMSUBMIT_ENDPOINT = "https://formsubmit.co/ajax/YOUR_EMAIL@example.com";
+
+  /* WhatsApp click-to-chat number for the IT Support button below.
+     Placeholder — replace with a real number in E.164 digits only
+     (country code + number, no "+", spaces, or dashes) before this
+     is meant to actually reach anyone. Never hardcode a real number
+     here in a shared/committed copy of this file. */
+  const WHATSAPP_NUMBER = "00000000000";
+  const WHATSAPP_MESSAGE = "Hi UOB IT PMO team, I need help with: ";
 
   const STATUSES = ["Backlog", "In Progress", "Blocked", "Done"];
 
@@ -1387,9 +1441,16 @@
   /* ============================================================
      INIT
      ============================================================ */
+  function initWhatsAppFab() {
+    const fab = document.getElementById("whatsappFab");
+    if (!fab) return;
+    fab.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  }
+
   function init() {
     seedTasks();
     initEvents();
+    initWhatsAppFab();
     renderBoard();
   }
 
