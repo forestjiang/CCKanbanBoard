@@ -384,6 +384,12 @@
   .card.priority-medium { border-left-color: var(--priority-medium); }
   .card.priority-low { border-left-color: var(--priority-low); }
 
+  .card.overdue {
+    background: var(--priority-critical-bg);
+    border-color: var(--danger);
+    box-shadow: 0 1px 3px rgba(179, 38, 30, 0.3);
+  }
+
   .card-top {
     display: flex;
     align-items: flex-start;
@@ -1022,8 +1028,8 @@
     const confirming = state.confirmDeleteId === task.id;
 
     return `
-      <article class="card priority-${priorityKey}" draggable="true" data-id="${escapeHtml(task.id)}"
-                aria-label="Task ${escapeHtml(task.id)}: ${escapeHtml(task.title)}, priority ${escapeHtml(task.priority)}">
+      <article class="card priority-${priorityKey} ${overdue ? "overdue" : ""}" draggable="true" data-id="${escapeHtml(task.id)}"
+                aria-label="Task ${escapeHtml(task.id)}: ${escapeHtml(task.title)}, priority ${escapeHtml(task.priority)}${overdue ? ", overdue" : ""}">
         <div class="card-top">
           <span class="card-id">${escapeHtml(task.id)}</span>
           <button type="button" class="btn-delete" data-id="${escapeHtml(task.id)}" aria-label="Delete task ${escapeHtml(task.id)}">×</button>
