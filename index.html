@@ -643,7 +643,7 @@
      ============================================================ */
   .toast-region {
     position: fixed;
-    bottom: var(--space-5);
+    bottom: calc(var(--space-5) + 68px);
     right: var(--space-5);
     display: flex;
     flex-direction: column;
@@ -665,39 +665,95 @@
   .toast-error { background: var(--danger); }
 
   /* ============================================================
-     WHATSAPP IT SUPPORT — floating click-to-chat link
+     WHATSAPP IT SUPPORT — floating chat launcher with quick topics
      ============================================================ */
-  .whatsapp-fab {
+  .whatsapp-widget {
     position: fixed;
     bottom: var(--space-5);
-    left: var(--space-5);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
+    right: var(--space-5);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .whatsapp-fab {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border: none;
+    border-radius: 50%;
     background: #0b7a6b;
     color: #fff;
-    text-decoration: none;
-    padding: 10px var(--space-4);
-    border-radius: 999px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-    font-size: 0.85rem;
-    font-weight: 600;
-    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.28);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
 
   .whatsapp-fab:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.32);
   }
 
-  .whatsapp-fab svg {
-    flex: 0 0 auto;
+  .whatsapp-panel {
+    margin-bottom: var(--space-3);
+    width: 280px;
+    max-width: calc(100vw - 2 * var(--space-5));
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.28);
+    overflow: hidden;
   }
 
-  @media (max-width: 560px) {
-    .whatsapp-fab-label { display: none; }
-    .whatsapp-fab { padding: 12px; }
+  .whatsapp-panel.hidden { display: none; }
+
+  .whatsapp-panel-header {
+    background: #0b7a6b;
+    color: #fff;
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .whatsapp-panel-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .whatsapp-panel-sub {
+    font-size: 0.75rem;
+    color: #e3f3f0;
+  }
+
+  .whatsapp-panel-questions {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-2);
+  }
+
+  .whatsapp-question {
+    display: block;
+    padding: 9px 10px;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+
+  .whatsapp-question:hover,
+  .whatsapp-question:focus-visible {
+    background: var(--uob-blue-50);
+  }
+
+  .whatsapp-question-general {
+    margin-top: var(--space-1);
+    padding-top: 17px;
+    border-top: 1px solid var(--border);
+    font-weight: 600;
+    color: #0b7a6b;
   }
 </style>
 </head>
@@ -892,14 +948,22 @@
   <div class="toast-region" id="toastRegion" role="status" aria-live="polite"></div>
 
   <!-- ============================================================
-       WHATSAPP IT SUPPORT — floating click-to-chat link
+       WHATSAPP IT SUPPORT — floating chat launcher with quick topics
        ============================================================ -->
-  <a class="whatsapp-fab" id="whatsappFab" href="#" target="_blank" rel="noopener" aria-label="Chat with IT Support on WhatsApp">
-    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" focusable="false">
-      <path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1a6.6 6.6 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-1 2.2c0 1.3.9 2.6 1.1 2.8.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/>
-    </svg>
-    <span class="whatsapp-fab-label">IT Support</span>
-  </a>
+  <div class="whatsapp-widget" id="whatsappWidget">
+    <div class="whatsapp-panel hidden" id="whatsappPanel" role="menu" aria-label="IT Support quick topics">
+      <div class="whatsapp-panel-header">
+        <span class="whatsapp-panel-title">IT Support</span>
+        <span class="whatsapp-panel-sub">Chat with us on WhatsApp — pick a topic to start</span>
+      </div>
+      <div class="whatsapp-panel-questions" id="whatsappQuestions"></div>
+    </div>
+    <button type="button" class="whatsapp-fab" id="whatsappToggle" aria-haspopup="true" aria-expanded="false" aria-controls="whatsappPanel" aria-label="Open IT Support WhatsApp chat topics">
+      <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1a6.6 6.6 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-1 2.2c0 1.3.9 2.6 1.1 2.8.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/>
+      </svg>
+    </button>
+  </div>
 
 <script>
 (function () {
@@ -925,6 +989,15 @@
      here in a shared/committed copy of this file. */
   const WHATSAPP_NUMBER = "00000000000";
   const WHATSAPP_MESSAGE = "Hi UOB IT PMO team, I need help with: ";
+
+  // Quick-topic presets shown in the IT Support panel — each opens
+  // WhatsApp with its own pre-filled message instead of the generic one.
+  const WHATSAPP_QUESTIONS = [
+    { label: "Reset my password", message: "Hi IT Support, I need help resetting my password." },
+    { label: "Request VPN / remote access", message: "Hi IT Support, I need VPN or remote access set up." },
+    { label: "Report a system outage", message: "Hi IT Support, I'd like to report a system outage." },
+    { label: "Software installation request", message: "Hi IT Support, I have a software installation request." }
+  ];
 
   const STATUSES = ["Backlog", "In Progress", "Blocked", "Done"];
 
@@ -1441,16 +1514,56 @@
   /* ============================================================
      INIT
      ============================================================ */
-  function initWhatsAppFab() {
-    const fab = document.getElementById("whatsappFab");
-    if (!fab) return;
-    fab.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  function buildWhatsAppLink(message) {
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  }
+
+  function initWhatsAppWidget() {
+    const widget = document.getElementById("whatsappWidget");
+    const toggle = document.getElementById("whatsappToggle");
+    const panel = document.getElementById("whatsappPanel");
+    const questionsEl = document.getElementById("whatsappQuestions");
+    if (!widget || !toggle || !panel || !questionsEl) return;
+
+    const questionLinks = WHATSAPP_QUESTIONS.map(q =>
+      `<a class="whatsapp-question" href="${buildWhatsAppLink(q.message)}" target="_blank" rel="noopener" role="menuitem">${escapeHtml(q.label)}</a>`
+    ).join("");
+
+    questionsEl.innerHTML = `
+      ${questionLinks}
+      <a class="whatsapp-question whatsapp-question-general" href="${buildWhatsAppLink(WHATSAPP_MESSAGE)}" target="_blank" rel="noopener" role="menuitem">Start a general chat</a>
+    `;
+
+    function openPanel() {
+      panel.classList.remove("hidden");
+      toggle.setAttribute("aria-expanded", "true");
+    }
+    function closePanel() {
+      panel.classList.add("hidden");
+      toggle.setAttribute("aria-expanded", "false");
+    }
+
+    toggle.addEventListener("click", () => {
+      const isOpen = !panel.classList.contains("hidden");
+      if (isOpen) closePanel(); else openPanel();
+    });
+
+    document.addEventListener("click", e => {
+      if (!widget.contains(e.target)) closePanel();
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && !panel.classList.contains("hidden")) {
+        closePanel();
+        toggle.focus();
+      }
+    });
   }
 
   function init() {
     seedTasks();
     initEvents();
-    initWhatsAppFab();
+    initWhatsAppWidget();
     renderBoard();
   }
 
